@@ -1,0 +1,29 @@
+{
+  "name": "developing-locally-with-glip",
+  "version": "0.0.1",
+  "description": "A sample app to develop locally with glip using ngrok",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pkvenu/developing-locally-with-Glip.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pkvenu/developing-locally-with-Glip/issues"
+  },
+  "keywords": [
+    "glip",
+    "onboarding",
+    "chatbot",
+    "bot"
+  ],
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.5",
+    "request": "^2.82.0",
+    "ringcentral": "^3.1.3"
+  }
+}
