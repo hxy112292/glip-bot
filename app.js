@@ -101,7 +101,7 @@ function subscribeToGlipEvents(token){
             "transportType": "WebHook",
             "address": REDIRECT_HOST + "/callback"
         },
-        "expiresIn": 604789
+        "expiresIn": 604799
     };
     platform.post('/subscription', requestData)
         .then(function (subscriptionResponse) {
