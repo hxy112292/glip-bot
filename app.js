@@ -10,6 +10,7 @@ const REDIRECT_HOST= process.env.REDIRECT_HOST;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const RINGCENTRAL_ENV= process.env.RINGCENTRAL_ENV;
+const RINGCENTRAL_CODE=process.env.RINGCENTRAL_CODE;
 
 
 var app = express();
@@ -32,7 +33,8 @@ app.get('/', function(req, res) {
 rcsdk = new RC({
     server: RINGCENTRAL_ENV,
     appKey: CLIENT_ID,
-    appSecret: CLIENT_SECRET
+    appSecret: CLIENT_SECRET,
+    redirectUri: REDIRECT_HOST + '/oauth'
 });
 
 platform = rcsdk.platform();
@@ -51,6 +53,7 @@ app.get('/oauth', function (req, res) {
             redirectUri : REDIRECT_HOST + '/oauth'
         }).then(function(authResponse){
             var obj = authResponse.json();
+            console.log(obj);
             bot_token = obj.access_token;
             res.send(obj)
             subscribeToGlipEvents();
@@ -87,6 +90,32 @@ app.post('/callback', function (req, res) {
         });
     }
 });
+
+app.post('/post', function (req, res) {
+    var body =[];
+    req.on('data', function(chunk) {
+        body.push(chunk);
+    }).on('end', function() {
+        body = Buffer.concat(body).toString();
+        var obj = JSON.parse(body);
+        post_text_message(obj.chatId, obj.text);
+    });
+    res.send()
+});
+
+function post_text_message(chat_id, text) {
+    console.log(chat_id);
+    console.log(text);
+    platform.post('/restapi/v1.0/glip/chats/'+chat_id+'/posts', {
+        text: text
+    }).then(function(resp){
+        var json = resp.json()
+        var id = json['id']
+        console.log("Posted message successfully, id: " + id)
+    }).catch(function(e){
+        console.log(e)
+    })
+}
 
 // Method to Subscribe to Glip Events.
 function subscribeToGlipEvents(token){
