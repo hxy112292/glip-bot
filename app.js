@@ -72,9 +72,6 @@ app.post('/callback', function (req, res) {
             var obj = JSON.parse(body);
             res.statusCode = 200;
             res.end(body);
-            if(obj.event == "/restapi/v1.0/subscription/~?threshold=60&interval=15"){
-                renewSubscription(obj.subscriptionId);
-            }
         });
     }
 });
