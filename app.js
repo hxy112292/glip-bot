@@ -45,6 +45,7 @@ app.get('/oauth', async function (req, res) {
             console.log(req.session.tokens)
             res.send(resp.json());
         } catch (e) {
+            throw new Error(e);
             res.send('Login error ' + e);
         }
     } else {
