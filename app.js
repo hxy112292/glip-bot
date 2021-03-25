@@ -40,27 +40,23 @@ rcsdk = new RC({
 platform = rcsdk.platform();
 
 //Authorization callback method.
-app.get('/oauth', function (req, res) {
+app.get('/oauth', async function (req, res) {
     console.log(req.query);
-    if(!req.query.code){
-        res.status(500);
-        res.send({"Error": "Looks like we're not getting code."});
-        console.log("Looks like we're not getting code.");
-    }else {
-        console.log("Authorize beginning...")
-        platform.login({
-            code : req.query.code,
-            redirectUri : REDIRECT_HOST + '/oauth'
-        }).then(function(authResponse){
-            var obj = authResponse.json();
-            console.log(obj);
-            bot_token = obj.access_token;
-            res.send(obj)
-        }).catch(function(e){
-            console.error(e)
-            res.send("Error: " + e);
-        })
-        console.log("Authorize end...")
+    if (req.query.code) {
+        try {
+            var platform = rcsdk.platform()
+            var resp = await platform.login({
+                code: req.query.code,
+                redirectUri: RINGCENTRAL_REDIRECT_URL
+            })
+            req.session.tokens = await resp.json()
+            console.log(req.session.tokens)
+            res.send(resp.json());
+        } catch (e) {
+            res.send('Login error ' + e);
+        }
+    } else {
+        res.send('No Auth code');
     }
 });
 
