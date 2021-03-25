@@ -44,10 +44,9 @@ app.get('/oauth', async function (req, res) {
     console.log(req.query);
     if (req.query.code) {
         try {
-            var platform = rcsdk.platform()
             var resp = await platform.login({
                 code: req.query.code,
-                redirectUri: RINGCENTRAL_REDIRECT_URL
+                redirectUri: REDIRECT_HOST + '/oauth'
             })
             req.session.tokens = await resp.json()
             console.log(req.session.tokens)
