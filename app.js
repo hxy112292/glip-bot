@@ -1,9 +1,7 @@
 require('dotenv').config();
 
 var express = require('express');
-var request = require('request');
 const RC = require('@ringcentral/sdk').SDK;
-
 
 const PORT= process.env.PORT;
 const REDIRECT_HOST= process.env.REDIRECT_HOST;
@@ -12,19 +10,15 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const RINGCENTRAL_ENV= process.env.RINGCENTRAL_ENV;
 const RINGCENTRAL_CODE=process.env.RINGCENTRAL_CODE;
 
+let app = express();
+let platform, subscription, rcsdk, subscriptionId;
 
-var app = express();
-var platform, subscription, rcsdk, subscriptionId, bot_token;
-
-
-// Lets start our server
 app.listen(PORT, function () {
     //Callback triggered when server is successfully listening. Hurray!
     console.log("Example app listening on port " + PORT);
 });
 
 
-// This route handles GET requests to our root ngrok address and responds with the same "Ngrok is working message" we used before
 app.get('/', function(req, res) {
     res.send('Ngrok is working! Path Hit: ' + req.url);
 });
@@ -39,12 +33,11 @@ rcsdk = new RC({
 
 platform = rcsdk.platform();
 
-//Authorization callback method.
 app.get('/oauth', async function (req, res) {
     console.log(req.query);
-    if (req.query.code) {
+    if (req.query.code != null) {
         try {
-            var resp = await platform.login({
+            let resp = await platform.login({
                 code: req.query.code,
                 redirectUri: REDIRECT_HOST + '/oauth'
             })
@@ -55,11 +48,11 @@ app.get('/oauth', async function (req, res) {
             res.send('Login error ' + e);
         }
     } else {
+        console.log('No Auth code');
         res.send('No Auth code');
     }
 });
 
-// Callback method received after subscribing to webhook
 app.post('/callback', function (req, res) {
     var validationToken = req.get('Validation-Token');
     var body =[];
@@ -111,7 +104,6 @@ function post_text_message(chat_id, text) {
     })
 }
 
-// Method to Subscribe to Glip Events.
 function subscribeToGlipEvents(token){
 
     var requestData = {
