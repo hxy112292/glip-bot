@@ -32,8 +32,8 @@ app.get('/', function(req, res) {
 
 rcsdk = new RC({
     server: RINGCENTRAL_ENV,
-    appKey: CLIENT_ID,
-    appSecret: CLIENT_SECRET,
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
     redirectUri: REDIRECT_HOST + '/oauth'
 });
 
