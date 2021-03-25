@@ -42,6 +42,7 @@ app.get('/oauth', async function (req, res) {
                 redirectUri: REDIRECT_HOST + '/oauth'
             })
             console.log(await resp.json())
+            console.log(await platform.auth().data())
             res.send('Auth success');
         } catch (e) {
             res.send('Login error ' + e);
