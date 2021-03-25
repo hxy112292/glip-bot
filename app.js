@@ -37,12 +37,12 @@ app.get('/oauth', async function (req, res) {
     console.log(req.query);
     if (req.query.code != null) {
         try {
-            // let resp = await platform.login({
-            //     code: req.query.code,
-            //     redirectUri: REDIRECT_HOST + '/oauth'
-            // })
-            // console.log(await resp.json())
-            // console.log(await platform.auth().data())
+            let resp = await platform.login({
+                code: req.query.code,
+                redirectUri: REDIRECT_HOST + '/oauth'
+            })
+            console.log(await resp.json())
+            console.log(await platform.auth().data())
             res.send('Auth success');
         } catch (e) {
             res.send('Login error ' + e);
