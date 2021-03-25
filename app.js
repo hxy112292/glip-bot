@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-var express = require('express');
+let express = require('express');
 const RC = require('@ringcentral/sdk').SDK;
 
 const PORT= process.env.PORT;
@@ -41,8 +41,8 @@ app.get('/oauth', async function (req, res) {
                 code: req.query.code,
                 redirectUri: REDIRECT_HOST + '/oauth'
             })
-            console.log(resp.json())
-            res.send(resp.json());
+            console.log(await resp.json())
+            res.send('Auth success');
         } catch (e) {
             res.send('Login error ' + e);
             throw new Error(e);
