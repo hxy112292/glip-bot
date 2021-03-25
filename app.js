@@ -2,7 +2,7 @@ require('dotenv').config();
 
 var express = require('express');
 var request = require('request');
-const RC = require('ringcentral');
+const RC = require('@ringcentral/sdk').SDK;
 
 
 const PORT= process.env.PORT;
